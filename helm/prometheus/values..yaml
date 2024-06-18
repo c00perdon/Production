@@ -1,0 +1,11 @@
+# helm/prometheus/values.yaml
+
+server:
+  global:
+    scrape_interval: 15s
+  service:
+    type: LoadBalancer
+  persistence:
+    enabled: true
+    size: 8Gi
+    storageClass: default

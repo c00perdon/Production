@@ -1,0 +1,21 @@
+# helm/grafana/values.yaml
+
+persistence:
+  enabled: true
+  size: 8Gi
+  storageClassName: default
+
+adminUser: admin
+adminPassword: admin
+service:
+  type: LoadBalancer
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-server
+      access: proxy
+      isDefault: true
