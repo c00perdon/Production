@@ -31,7 +31,7 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Get AKS credentials
-      run: az aks get-credentials --resource-group <your-resource-group> --name <your-aks-cluster-name>
+      run: az aks get-credentials --resource-group aks-resource-group --name aks-cluster
 
     - name: Create Helm config directory
       run: mkdir -p /home/runner/.helm/repository
