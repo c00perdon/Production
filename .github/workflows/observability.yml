@@ -33,6 +33,10 @@ jobs:
     - name: Get AKS credentials
       run: az aks get-credentials --resource-group aks-resource-group --name aks-cluster
 
+    - name: Initialize Helm
+      run: |
+        helm init --client-only
+
     - name: Update Helm repositories
       run: |
         helm repo update
