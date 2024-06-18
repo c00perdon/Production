@@ -33,11 +33,9 @@ jobs:
     - name: Get AKS credentials
       run: az aks get-credentials --resource-group aks-resource-group --name aks-cluster
 
-    - name: Create Helm config directory
-      run: mkdir -p /home/runner/.helm/repository
-
-    - name: Create empty repositories.yaml file
-      run: echo "{}" > /home/runner/.helm/repository/repositories.yaml
+    - name: Update Helm repositories
+      run: |
+        helm repo update
 
     - name: Deploy Prometheus
       run: |
