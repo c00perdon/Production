@@ -1,4 +1,4 @@
-name: Deploy to Local Minikube
+name: Deploy Prom/Grafana to Minikube
 
 on:
   push:
