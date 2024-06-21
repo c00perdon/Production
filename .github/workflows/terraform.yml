@@ -22,11 +22,11 @@ jobs:
         terraform_version: 1.0.11
 
     - name: Terraform Init
-      run: terraform init
-      working-directory: ./terraform  # Adjust if your Terraform files are in a subdirectory
+      run: |
+        cd grafana-tf
+        terraform init
 
     - name: Terraform Apply
-      run: terraform apply -auto-approve
-      working-directory: ./terraform  # Adjust if your Terraform files are in a subdirectory
-      env:
-        TF_VAR_grafana_api_key: ${{ secrets.GRAFANA_API_KEY }}
+      run: |
+        cd grafana-tf
+        terraform apply -auto-approve
