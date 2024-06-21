@@ -10,23 +10,34 @@ jobs:
     runs-on: self-hosted
 
     steps:
-    - name: Checkout grafana-tf repository
-      uses: actions/checkout@v2
-      with:
-        repository: c00perdon/grafana-tf
-        ref: main  # Adjust if you want to use a different branch
+      - name: Checkout grafana-tf repository
+        uses: actions/checkout@v2
+        with:
+          repository: c00perdon/grafana-tf
+          ref: main  # Adjust if you want to use a different branch
 
-    - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        terraform_version: 1.0.11
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.11
 
-    - name: Terraform Init
-      run: |
-        cd grafana-tf
-        terraform init
+      - name: Verify Archive File
+        run: |
+          if ((Get-Command -Name Expand-Archive -Module Microsoft.PowerShell.Archive -ErrorAction Ignore)) {
+            Expand-Archive -LiteralPath 'D:\Roth-Prod\actions-runner\_work\_temp\615e75d8-f6c7-4f7b-8d6b-4aee047e0495.zip' -DestinationPath 'D:\Roth-Prod\actions-runner\_work\_temp\1f69c7fd-258a-4f42-87f1-809b9ba3b072' -Force
+          } else {
+            [System.IO.Compression.ZipFile]::ExtractToDirectory('D:\Roth-Prod\actions-runner\_work\_temp\615e75d8-f6c7-4f7b-8d6b-4aee047e0495.zip', 'D:\Roth-Prod\actions-runner\_work\_temp\1f69c7fd-258a-4f42-87f1-809b9ba3b072', $true)
+          }
 
-    - name: Terraform Apply
-      run: |
-        cd grafana-tf
-        terraform apply -auto-approve
+      - name: Terraform Init
+        run: |
+          cd grafana-tf
+          terraform init
+
+      - name: Terraform Apply
+        run: |
+          cd grafana-tf
+          terraform apply -auto-approve
+        env:
+          TF_VAR_grafana_url: "http://127.0.0.1:60420"
+          TF_VAR_grafana_auth: "admin:1qaz-2wsx"
