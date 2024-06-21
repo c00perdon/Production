@@ -1,4 +1,4 @@
-name: Deploy to Minikube
+name: Deploy to Local Minikube
 
 on:
   push:
@@ -7,33 +7,19 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up Minikube
-      run: |
-        curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-        sudo install minikube /usr/local/bin/
-
-    - name: Start Minikube
-      run: |
-        minikube start --driver=docker
-
-    - name: Set up kubectl
-      uses: azure/setup-kubectl@v3
-      with:
-        version: 'latest'
-
-    - name: Configure kubectl to use Minikube
+    - name: Set up Kubernetes context
       run: |
         kubectl config use-context minikube
+        kubectl config current-context
 
     - name: Set up Helm
       run: |
-        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
         helm repo add stable https://charts.helm.sh/stable
         helm repo update
 
@@ -48,3 +34,15 @@ jobs:
         helm repo add grafana https://grafana.github.io/helm-charts
         helm repo update
         helm upgrade --install grafana grafana/grafana -f helm/grafana/values.yaml --namespace monitoring
+
+    - name: Check Helm Releases
+      run: |
+        helm list -n monitoring
+
+    - name: Check Pods in Monitoring Namespace
+      run: |
+        kubectl get pods -n monitoring
+
+    - name: Check Events in Monitoring Namespace
+      run: |
+        kubectl get events -n monitoring
