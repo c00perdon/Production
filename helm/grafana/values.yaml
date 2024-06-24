@@ -17,11 +17,16 @@ datasources:
       url: http://prometheus-server
       access: proxy
       isDefault: true
+    - name: PostgreSQL
+      type: postgres
+      url: postgresql://admin:mypassword@my-postgresql.default.svc.cluster.local:5432/pauldb
+      access: proxy
+      isDefault: false
 
 # Add PostgreSQL database configuration
 env:
   GF_DATABASE_TYPE: postgres
   GF_DATABASE_HOST: my-postgresql.default.svc.cluster.local:5432
-  GF_DATABASE_NAME: my-postgresql
+  GF_DATABASE_NAME: pauldb
   GF_DATABASE_USER: admin
   GF_DATABASE_PASSWORD: mypassword
