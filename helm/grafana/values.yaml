@@ -22,6 +22,6 @@ datasources:
 env:
   GF_DATABASE_TYPE: postgres
   GF_DATABASE_HOST: my-postgresql.default.svc.cluster.local:5432
-  GF_DATABASE_NAME: mydatabase
+  GF_DATABASE_NAME: my-postgresql
   GF_DATABASE_USER: admin
   GF_DATABASE_PASSWORD: mypassword
