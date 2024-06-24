@@ -1,5 +1,3 @@
-# helm/grafana/values.yaml
-
 persistence:
   enabled: true
   size: 8Gi
@@ -19,3 +17,11 @@ datasources:
       url: http://prometheus-server
       access: proxy
       isDefault: true
+
+# Add PostgreSQL database configuration
+env:
+  GF_DATABASE_TYPE: postgres
+  GF_DATABASE_HOST: my-postgresql.default.svc.cluster.local:5432
+  GF_DATABASE_NAME: mydatabase
+  GF_DATABASE_USER: admin
+  GF_DATABASE_PASSWORD: mypassword
