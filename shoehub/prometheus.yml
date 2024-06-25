@@ -13,11 +13,10 @@ rule_files:
 
 alerting:
   alertmanagers:
-  - scheme: http
-    basic_auth:
-      username: "admin"
-      password: "password"
-  - static_configs:
-    - targets:
-       - localhost:9093
-
+    - scheme: http
+      static_configs:
+        - targets:
+            - localhost:9093
+      basic_auth:
+        username: "admin"
+        password: "password"
