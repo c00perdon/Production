@@ -10,7 +10,7 @@ server:
   persistence:
     enabled: true
     size: 8Gi
-    storageClass: default
+    storageClass: standard
 
   securityContext:
     runAsUser: 1000
