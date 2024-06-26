@@ -3,9 +3,23 @@
 server:
   global:
     scrape_interval: 15s
+
   service:
     type: LoadBalancer
+
   persistence:
     enabled: true
     size: 8Gi
     storageClass: default
+
+  securityContext:
+    runAsUser: 1000
+    fsGroup: 2000
+
+  resources:
+    requests:
+      memory: "1Gi"
+      cpu: "500m"
+    limits:
+      memory: "2Gi"
+      cpu: "1000m"
