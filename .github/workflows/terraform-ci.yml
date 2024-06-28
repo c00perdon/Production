@@ -49,11 +49,11 @@ jobs:
           terraform init
 
       # Initialize Terraform (install providers, modules, etc.)
-      - name: Initialize Terraform
-        run: |
-          cd .\rt-observability\modules\prometheus  # Adjust to your environment directory
-          ls  # List contents to verify directory contents
-          terraform init
+     #- name: Initialize Terraform
+      #run: |
+        #   cd .\rt-observability\modules\prometheus  # Adjust to your environment directory
+          # ls  # List contents to verify directory contents
+           #terraform init
     
       # Apply Terraform changes (deploy Prometheus)
       - name: Deploy Prometheus with Terraform
