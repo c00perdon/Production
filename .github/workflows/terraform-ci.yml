@@ -39,24 +39,27 @@ jobs:
       # Debugging: List contents of environments/dev directory
       - name: List contents of environments/dev directory
         run: |
-          Get-ChildItem -Path .\Production\rt-observability\environments\dev -Force
+          Get-ChildItem -Path .\rt-observability\environments\dev -Force
 
       # Initialize Terraform (install providers, modules, etc.)
       - name: Initialize Terraform
         run: |
-          cd .\Production\rt-observability\environments\dev  # Adjust to your environment directory
+          cd .\rt-observability\environments\dev  # Adjust to your environment directory
+          ls  # List contents to verify directory contents
           terraform init
 
       # Apply Terraform changes (deploy Prometheus)
       - name: Deploy Prometheus with Terraform
         run: |
-          cd .\Production\rt-observability\environments\dev  # Adjust to your environment directory
+          cd .\rt-observability\environments\dev  # Adjust to your environment directory
+          ls  # List contents to verify directory contents
           terraform apply -auto-approve
 
       # Capture output or any further integration steps (optional)
       - name: Capture Prometheus endpoint
         run: |
-          cd .\Production\rt-observability\environments\dev  # Adjust to your environment directory
+          cd .\rt-observability\environments\dev  # Adjust to your environment directory
+          ls  # List contents to verify directory contents
           terraform output prometheus_endpoint > prometheus_endpoint.txt
           Get-Content .\prometheus_endpoint.txt  # Example: Display output
 
@@ -64,5 +67,6 @@ jobs:
       - name: Destroy Prometheus deployment
         if: ${{ github.event_name == 'pull_request' }}  # Optional: Only destroy on PR events
         run: |
-          cd .\Production\rt-observability\environments\dev  # Adjust to your environment directory
+          cd .\rt-observability\environments\dev  # Adjust to your environment directory
+          ls  # List contents to verify directory contents
           terraform destroy -auto-approve
