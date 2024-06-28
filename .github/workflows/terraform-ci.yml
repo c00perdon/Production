@@ -48,12 +48,19 @@ jobs:
           ls  # List contents to verify directory contents
           terraform init
 
+      # Initialize Terraform (install providers, modules, etc.)
+      - name: Initialize Terraform
+        run: |
+          cd .\rt-observability\modules\prometheus  # Adjust to your environment directory
+          ls  # List contents to verify directory contents
+          terraform init
+    
       # Apply Terraform changes (deploy Prometheus)
       - name: Deploy Prometheus with Terraform
         run: |
           cd .\rt-observability\environments\dev  # Adjust to your environment directory
           ls  # List contents to verify directory contents
-          terraform apply -auto-approve -var-file="../../modules/prometheus/variables.tf"
+          terraform apply -auto-approve
 
       # Capture output or any further integration steps (optional)
       - name: Capture Prometheus endpoint
