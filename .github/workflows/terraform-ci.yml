@@ -37,24 +37,24 @@ jobs:
 
       # Debugging: List contents of environments/dev directory
       - name: List contents of environments/dev directory
-        run: ls -la rt-observability/environments/dev
+        run: ls -la Production/rt-observability/environments/dev
 
       # Initialize Terraform (install providers, modules, etc.)
       - name: Initialize Terraform
         run: |
-          cd rt-observability/environments/dev  # Adjust to your environment directory
+          cd Production/rt-observability/environments/dev  # Adjust to your environment directory
           terraform init
 
       # Apply Terraform changes (deploy Prometheus)
       - name: Deploy Prometheus with Terraform
         run: |
-          cd rt-observability/environments/dev  # Adjust to your environment directory
+          cd Production/rt-observability/environments/dev  # Adjust to your environment directory
           terraform apply -auto-approve
 
       # Capture output or any further integration steps (optional)
       - name: Capture Prometheus endpoint
         run: |
-          cd rt-observability/environments/dev  # Adjust to your environment directory
+          cd Production/rt-observability/environments/dev  # Adjust to your environment directory
           terraform output prometheus_endpoint > prometheus_endpoint.txt
           cat prometheus_endpoint.txt  # Example: Display output
 
@@ -62,5 +62,5 @@ jobs:
       - name: Destroy Prometheus deployment
         if: ${{ github.event_name == 'pull_request' }}  # Optional: Only destroy on PR events
         run: |
-          cd rt-observability/environments/dev  # Adjust to your environment directory
+          cd Production/rt-observability/environments/dev  # Adjust to your environment directory
           terraform destroy -auto-approve
