@@ -1,7 +1,7 @@
 # environments/dev/terragrunt.hcl
 
 terraform {
-  source = "terraform.io/<your_organization>/prometheus/kubernetes"
+  source = "git::https://github.com/c00perdon/Production.git//rt-observability/modules/prometheus"
 }
 
 include {
