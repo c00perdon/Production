@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = ">= 1.11.1"  # Adjust version as needed
+    }
+  }
+}
+
 provider "kubernetes" {
   # Optionally specify a kubeconfig file. If not provided, the default kubeconfig will be used.
 }
@@ -27,4 +36,29 @@ module "prometheus" {
     },
     var.prometheus_config_data
   )
+}
+
+variable "prometheus_image" {
+  description = "Docker image for Prometheus"
+  type        = string
+}
+
+variable "prometheus_replicas" {
+  description = "Number of replicas for Prometheus deployment"
+  type        = number
+}
+
+variable "prometheus_scrape_interval" {
+  description = "Scrape interval for Prometheus"
+  type        = string
+}
+
+variable "prometheus_storage_retention" {
+  description = "Time duration for which data should be retained in Prometheus"
+  type        = string
+}
+
+variable "prometheus_config_data" {
+  description = "Data for prometheus.yml configuration"
+  type        = map
 }
