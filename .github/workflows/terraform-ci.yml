@@ -53,7 +53,7 @@ jobs:
         run: |
           cd .\rt-observability\environments\dev  # Adjust to your environment directory
           ls  # List contents to verify directory contents
-          terraform apply -auto-approve -var-file="../../modules/prometheus/variables.tfvars"
+          terraform apply -auto-approve -var-file="../../modules/prometheus/variables.tf"
 
       # Capture output or any further integration steps (optional)
       - name: Capture Prometheus endpoint
