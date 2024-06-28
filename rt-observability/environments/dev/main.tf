@@ -5,7 +5,7 @@ provider "kubernetes" {
 }
 
 module "prometheus" {
-  source = "../modules/prometheus"
+  source = "git::https://github.com/c00perdon/Production.git//rt-observability/modules/prometheus"
 
   # Variables specific to the dev environment
   prometheus_image             = "prom/prometheus:v2.30.3"
