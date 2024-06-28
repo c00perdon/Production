@@ -1,0 +1,64 @@
+name: Deploy Prometheus to Kind (local)
+
+on:
+  push:
+    branches:
+      - main  # Trigger the workflow on push events to the main branch
+  pull_request:
+    branches:
+      - main  # Trigger the workflow on pull request events to the main branch
+
+jobs:
+  deploy_prometheus:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Install required tools (kubectl, terraform, podman, etc.)
+      - name: Set up tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            kubectl \
+            podman \
+            curl \
+            unzip
+          
+          # Install Terraform
+          curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+          sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+          sudo apt-get update && sudo apt-get install terraform
+
+      # Log into your local Kubernetes cluster (Kind)
+      - name: Configure Kubernetes context
+        run: |
+          kind export kubeconfig --name=kind-roth-prod
+          kubectl config use-context kind-roth-prod
+
+      # Initialize Terraform (install providers, modules, etc.)
+      - name: Initialize Terraform
+        run: |
+          cd environments/dev  # Adjust to your environment directory
+          terraform init
+
+      # Apply Terraform changes (deploy Prometheus)
+      - name: Deploy Prometheus with Terraform
+        run: |
+          cd environments/dev  # Adjust to your environment directory
+          terraform apply -auto-approve
+
+      # Capture output or any further integration steps (optional)
+      - name: Capture Prometheus endpoint
+        run: |
+          cd environments/dev  # Adjust to your environment directory
+          terraform output prometheus_endpoint > prometheus_endpoint.txt
+          cat prometheus_endpoint.txt  # Example: Display output
+
+      # Clean up (optional: destroy resources after testing)
+      - name: Destroy Prometheus deployment
+        if: ${{ github.event_name == 'pull_request' }}  # Optional: Only destroy on PR events
+        run: |
+          cd environments/dev  # Adjust to your environment directory
+          terraform destroy -auto-approve
