@@ -1,4 +1,4 @@
-# prometheus/outputs.tf
+# prometheus/outputs.tf1
 
 output "prometheus_service_name" {
   value = kubernetes_service.prometheus.metadata[0].name
