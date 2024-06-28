@@ -12,7 +12,7 @@ provider "kubernetes" {
 }
 
 module "prometheus" {
-  source = "git::https://github.com/c00perdon/Production.git/rt-observability/modules/prometheus"
+  source = "https://github.com/c00perdon/Production.git//rt-observability/modules/prometheus"
 
   prometheus_image             = var.prometheus_image
   prometheus_replicas          = var.prometheus_replicas
