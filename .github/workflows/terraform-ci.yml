@@ -33,34 +33,36 @@ jobs:
 
       # Debugging: List contents of root directory
       - name: List contents of root directory
-        run: ls -la
+        run: |
+          Get-ChildItem -Path . -Force
 
       # Debugging: List contents of environments/dev directory
       - name: List contents of environments/dev directory
-        run: ls -la Production/rt-observability/environments/dev
+        run: |
+          Get-ChildItem -Path .\Production\rt-observability\environments\dev -Force
 
       # Initialize Terraform (install providers, modules, etc.)
       - name: Initialize Terraform
         run: |
-          cd Production/rt-observability/environments/dev  # Adjust to your environment directory
+          cd .\Production\rt-observability\environments\dev  # Adjust to your environment directory
           terraform init
 
       # Apply Terraform changes (deploy Prometheus)
       - name: Deploy Prometheus with Terraform
         run: |
-          cd Production/rt-observability/environments/dev  # Adjust to your environment directory
+          cd .\Production\rt-observability\environments\dev  # Adjust to your environment directory
           terraform apply -auto-approve
 
       # Capture output or any further integration steps (optional)
       - name: Capture Prometheus endpoint
         run: |
-          cd Production/rt-observability/environments/dev  # Adjust to your environment directory
+          cd .\Production\rt-observability\environments\dev  # Adjust to your environment directory
           terraform output prometheus_endpoint > prometheus_endpoint.txt
-          cat prometheus_endpoint.txt  # Example: Display output
+          Get-Content .\prometheus_endpoint.txt  # Example: Display output
 
       # Clean up (optional: destroy resources after testing)
       - name: Destroy Prometheus deployment
         if: ${{ github.event_name == 'pull_request' }}  # Optional: Only destroy on PR events
         run: |
-          cd Production/rt-observability/environments/dev  # Adjust to your environment directory
+          cd .\Production\rt-observability\environments\dev  # Adjust to your environment directory
           terraform destroy -auto-approve
