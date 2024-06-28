@@ -25,9 +25,12 @@ jobs:
 
           # Add Terraform to PATH
           $env:Path += ";$env:ProgramFiles\terraform"
-          
+
           # Check Terraform version
           terraform --version
+
+          # Set permissions to the terraform directory
+          Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
 
       # Log into your local Kubernetes cluster (Kind)
       - name: Configure Kubernetes context
