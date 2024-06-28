@@ -1,5 +1,3 @@
-# prometheus/variables.tf
-
 variable "prometheus_image" {
   description = "Docker image for Prometheus"
   type        = string
@@ -26,20 +24,6 @@ variable "prometheus_storage_retention" {
 
 variable "prometheus_config_data" {
   description = "Data for prometheus.yml configuration"
-  type        = map
-  default     = {
-    global = {
-      scrape_interval = var.prometheus_scrape_interval
-    }
-    scrape_configs = [
-      {
-        job_name     = "prometheus"
-        static_configs = [
-          {
-            targets = ["localhost:9090"]
-          }
-        ]
-      }
-    ]
-  }
+  type        = map(string)
+  default     = {}
 }
