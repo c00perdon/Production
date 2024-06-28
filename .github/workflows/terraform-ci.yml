@@ -16,10 +16,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Install Terraform on self-hosted runner with elevated privileges
-      - name: Install Terraform with elevated privileges
+      # Install Terraform with elevated privileges
+      - name: Install Terraform
         run: |
           Start-Process powershell -ArgumentList "Invoke-WebRequest -Uri 'https://releases.hashicorp.com/terraform/0.14.9/terraform_0.14.9_windows_amd64.zip' -OutFile 'terraform.zip'; Expand-Archive -Path 'terraform.zip' -DestinationPath 'C:\Program Files\terraform'; $env:Path += ';C:\Program Files\terraform'; terraform --version" -Verb RunAs
+
+      # Verify Terraform installation
+      - name: Verify Terraform installation
+        run: terraform --version
 
       # Log into your local Kubernetes cluster (Kind)
       - name: Configure Kubernetes context
@@ -27,22 +31,30 @@ jobs:
           kind export kubeconfig --name=kind-roth-prod
           kubectl config use-context kind-roth-prod
 
+      # Debugging: List contents of root directory
+      - name: List contents of root directory
+        run: ls -la
+
+      # Debugging: List contents of environments/dev directory
+      - name: List contents of environments/dev directory
+        run: ls -la rt-observability/environments/dev
+
       # Initialize Terraform (install providers, modules, etc.)
       - name: Initialize Terraform
         run: |
-          cd environments/dev  # Adjust to your environment directory
+          cd rt-observability/environments/dev  # Adjust to your environment directory
           terraform init
 
       # Apply Terraform changes (deploy Prometheus)
       - name: Deploy Prometheus with Terraform
         run: |
-          cd environments/dev  # Adjust to your environment directory
+          cd rt-observability/environments/dev  # Adjust to your environment directory
           terraform apply -auto-approve
 
       # Capture output or any further integration steps (optional)
       - name: Capture Prometheus endpoint
         run: |
-          cd environments/dev  # Adjust to your environment directory
+          cd rt-observability/environments/dev  # Adjust to your environment directory
           terraform output prometheus_endpoint > prometheus_endpoint.txt
           cat prometheus_endpoint.txt  # Example: Display output
 
@@ -50,5 +62,5 @@ jobs:
       - name: Destroy Prometheus deployment
         if: ${{ github.event_name == 'pull_request' }}  # Optional: Only destroy on PR events
         run: |
-          cd environments/dev  # Adjust to your environment directory
+          cd rt-observability/environments/dev  # Adjust to your environment directory
           terraform destroy -auto-approve
