@@ -8,7 +8,8 @@ terraform {
 }
 
 provider "kubernetes" {
-  host = "https://127.0.0.1:62032"  
+  host = "https://127.0.0.1:62032" 
+  insecure = true 
   config_path = var.kubeconfig_path  
 }
 
