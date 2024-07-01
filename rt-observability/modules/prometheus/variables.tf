@@ -23,7 +23,16 @@ variable "prometheus_storage_retention" {
 }
 
 variable "prometheus_config_data" {
-  description = "Data for prometheus.yml configuration"
-  type        = map(string)
-  default     = {}
+  description = "Prometheus configuration data"
+  type = object({
+    global = object({
+      scrape_interval = string
+    })
+    scrape_configs = list(object({
+      job_name = string
+      static_configs = list(object({
+        targets = list(string)
+      }))
+    }))
+  })
 }
