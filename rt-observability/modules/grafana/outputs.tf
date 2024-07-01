@@ -27,3 +27,7 @@ output "grafana_admin_user" {
 output "grafana_admin_password" {
   value = var.grafana_admin_password
 }
+
+output "grafana_endpoint" {
+  value = kubernetes_service.grafana.spec[0].cluster_ip
+}

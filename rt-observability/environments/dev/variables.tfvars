@@ -20,30 +20,16 @@ prometheus_config_data = {
   ]
 }
 
-# Grafana variables
-grafana_image       = "grafana/grafana:latest"
+grafana_image       = "grafana/grafana:9.0.7"
 grafana_replicas    = 1
 grafana_admin_user  = "admin"
-grafana_admin_password = "admin_password"
-
-# Grafana configuration data (example structure)
+grafana_admin_password = "admin"
 grafana_config_data = {
-  datasources = {
-    apiVersion = 1
-    datasources = [
-      {
-        name = "Prometheus"
-        type = "prometheus"
-        url  = "http://prometheus-service:9090"
-        access = "proxy"
-        isDefault = true
-      }
-    ]
+  server = {
+    http_port = 3000
   }
-  dashboards = [
-    {
-      name = "Example Dashboard"
-      json = file("path/to/dashboard.json")
-    }
-  ]
+  security = {
+    admin_user     = "admin"
+    admin_password = "admin"
+  }
 }
