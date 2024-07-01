@@ -10,13 +10,6 @@ resource "kubernetes_namespace" "prometheus" {
   metadata {
     name = "prometheus"
   }
-
-  lifecycle {
-    ignore_changes = [
-      metadata,
-      status,  # Add status to ignore_changes
-    ]
-  }
 }
 
 resource "kubernetes_service" "prometheus" {
