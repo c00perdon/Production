@@ -1,4 +1,4 @@
-name: Deploy Prometheus to Kind (local)
+name: Deploy Prometheus and Grafana to Kind (local)
 
 on:
   push:
@@ -9,18 +9,19 @@ on:
       - main  # Trigger the workflow on pull request events to the main branch
 
 jobs:
-  deploy_prometheus:
+  deploy_infrastructure:
     runs-on: self-hosted
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Install Terraform with elevated privileges
+      # Install Terraform and Terragrunt with elevated privileges
       - name: Install Terraform and Terragrunt
         run: |
           Start-Process powershell -ArgumentList "Invoke-WebRequest -Uri 'https://releases.hashicorp.com/terraform/0.14.9/terraform_0.14.9_windows_amd64.zip' -OutFile 'terraform.zip'; Expand-Archive -Path 'terraform.zip' -DestinationPath 'C:\Program Files\terraform'; $env:Path += ';C:\Program Files\terraform'; terraform --version" -Verb RunAs
           Start-Process powershell -ArgumentList "Invoke-WebRequest -Uri 'https://github.com/gruntwork-io/terragrunt/releases/download/v0.34.0/terragrunt_windows_amd64.exe' -OutFile 'C:\Program Files\terragrunt.exe'; $env:Path += ';C:\Program Files\'; terragrunt --version" -Verb RunAs
+      
       # Verify Terraform installation
       - name: Verify Terraform installation
         run: terraform --version
@@ -41,37 +42,32 @@ jobs:
         run: |
           Get-ChildItem -Path .\rt-observability\environments\dev -Force
 
-      # Initialize Terraform (install providers, modules, etc.)
-      - name: Initialize Terraform
+      # Initialize Terraform (install providers, modules, etc.) in the environments directory
+      - name: Initialize Terraform in environments/dev
         run: |
           cd .\rt-observability\environments\dev  # Adjust to your environment directory
           ls  # List contents to verify directory contents
           terraform init
 
-      # Initialize Terraform (install providers, modules, etc.)
-      - name: Initialize Terraform
-        run: |
-          cd .\rt-observability\modules\prometheus  # Adjust to your environment directory
-          ls  # List contents to verify directory contents
-          terraform init
-    
-      # Apply Terraform changes (deploy Prometheus)
-      - name: Deploy Prometheus with Terraform
+      # Apply Terraform changes (deploy Prometheus and Grafana)
+      - name: Deploy Prometheus and Grafana with Terraform
         run: |
           cd .\rt-observability\environments\dev  # Adjust to your environment directory
           ls  # List contents to verify directory contents
           terraform apply -auto-approve -var-file="./variables.tfvars"
 
       # Capture output or any further integration steps (optional)
-      - name: Capture Prometheus endpoint
+      - name: Capture Prometheus and Grafana endpoints
         run: |
           cd .\rt-observability\environments\dev  # Adjust to your environment directory
           ls  # List contents to verify directory contents
           terraform output prometheus_endpoint > prometheus_endpoint.txt
+          terraform output grafana_endpoint > grafana_endpoint.txt
           Get-Content .\prometheus_endpoint.txt  # Example: Display output
+          Get-Content .\grafana_endpoint.txt  # Example: Display output
 
       # Clean up (optional: destroy resources after testing)
-      - name: Destroy Prometheus deployment
+      - name: Destroy Prometheus and Grafana deployment
         if: ${{ github.event_name == 'pull_request' }}  # Optional: Only destroy on PR events
         run: |
           cd .\rt-observability\environments\dev  # Adjust to your environment directory
