@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "kubernetes" {
-  # Optionally specify a kubeconfig file. If not provided, the default kubeconfig will be used.
+  config_path = var.kubeconfig_path  
 }
 
 module "prometheus" {

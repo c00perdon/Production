@@ -10,6 +10,13 @@ variable "prometheus_replicas" {
   default     = 1
 }
 
+
+variable "kubeconfig_path" {
+  description = "Path to the kubeconfig file"
+  type        = string
+  default     = "C:/Users/COOPS/.kube/config"
+}
+
 variable "prometheus_scrape_interval" {
   description = "Scrape interval for Prometheus"
   type        = string
