@@ -1,6 +1,7 @@
 # prometheus/main.tf
 
 provider "kubernetes" {
+  host = "https://127.0.0.1:62032"  
   # Optionally specify a kubeconfig file. If not provided, the default kubeconfig will be used.
 }
 
