@@ -1,12 +1,12 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: test-user-list-namespaces
+  name: prometheus-deployment-manager-binding
 subjects:
-- kind: ServiceAccount
-  name: test-user
-  namespace: default
+- kind: User
+  name: system:anonymous
+  apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: ClusterRole
-  name: list-namespaces-role
+  name: prometheus-deployment-manager  # Updated ClusterRole or Role name
   apiGroup: rbac.authorization.k8s.io
