@@ -17,7 +17,7 @@ output "prometheus_deployment_name" {
 }
 
 output "prometheus_image" {
-  value = kubernetes_deployment.prometheus.spec[0].template.spec[0].container[0].image
+  value = kubernetes_deployment.prometheus.spec[0].template[0].spec[0].container[0].image
 }
 
 output "prometheus_config_map_name" {
