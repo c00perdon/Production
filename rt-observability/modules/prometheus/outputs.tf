@@ -5,7 +5,7 @@ output "prometheus_service_name" {
 }
 
 output "prometheus_service_port" {
-  value = kubernetes_service.prometheus.spec[0].ports[0].port
+  value = kubernetes_service.prometheus.spec[0].port[0].port
 }
 
 output "prometheus_service_cluster_ip" {
